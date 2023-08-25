@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux
  * @see <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html">Flux Javadoc</a>
  */
 class Part01Flux {
+
 // ========================================================================================
 
     fun emptyFlux(): Flux<String> {
