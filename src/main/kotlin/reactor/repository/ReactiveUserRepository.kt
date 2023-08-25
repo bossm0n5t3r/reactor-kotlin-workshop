@@ -14,8 +14,19 @@ class ReactiveUserRepository : ReactiveRepository<User> {
         private const val DEFAULT_DELAY_IN_MS = 100L
     }
 
-    private val delayInMs: Long = DEFAULT_DELAY_IN_MS
-    private val users = mutableListOf(User.SKYLER, User.JESSE, User.WALTER, User.SAUL)
+    private var delayInMs: Long = DEFAULT_DELAY_IN_MS
+    private var users = mutableListOf(User.SKYLER, User.JESSE, User.WALTER, User.SAUL)
+
+    constructor() : this(DEFAULT_DELAY_IN_MS)
+    constructor(delayInMs: Long) {
+        this.delayInMs = delayInMs
+    }
+
+    constructor(vararg users: User) : this(DEFAULT_DELAY_IN_MS, *users)
+    constructor(delayInMs: Long, vararg users: User) {
+        this.delayInMs = delayInMs
+        this.users = users.toMutableList()
+    }
 
     override fun save(publisher: Publisher<User>): Mono<Void> {
         return withDelay(Flux.from(publisher)).doOnNext { u -> this.users.add(u) }.then()
