@@ -1,6 +1,7 @@
 package reactor
 
 import reactor.core.publisher.Flux
+import java.time.Duration
 
 /**
  * Learn how to create Flux instances.
@@ -12,30 +13,32 @@ class Part01Flux {
 // ========================================================================================
 
     fun emptyFlux(): Flux<String> {
-        TODO("Return an empty Flux")
+        return Flux.empty()
     }
 
 // ========================================================================================
 
     fun fooBarFluxFromValues(): Flux<String> {
-        TODO("Return a Flux that contains 2 values \"foo\" and \"bar\" without using an array or a collection")
+        return Flux.just("foo", "bar")
     }
 
 // ========================================================================================
 
     fun fooBarFluxFromList(): Flux<String> {
-        TODO("Create a Flux from a List that contains 2 values \"foo\" and \"bar\"")
+        return Flux.fromIterable(listOf("foo", "bar"))
     }
 
 // ========================================================================================
 
     fun errorFlux(): Flux<String> {
-        TODO("Create a Flux that emits an IllegalStateException")
+        return Flux.error(IllegalStateException("errorFlux"))
     }
 
 // ========================================================================================
 
     fun counter(): Flux<Long> {
-        TODO("Create a Flux that emits increasing values from 0 to 9 each 100ms")
+        return Flux
+            .interval(Duration.ofMillis(100L))
+            .take(10L)
     }
 }
