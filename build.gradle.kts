@@ -21,10 +21,11 @@ dependencies {
     implementation("io.projectreactor:reactor-core")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+    implementation("io.projectreactor:reactor-test")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 }
 
 tasks.test {
