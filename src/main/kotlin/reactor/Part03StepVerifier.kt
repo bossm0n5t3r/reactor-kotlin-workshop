@@ -1,5 +1,6 @@
 package reactor
 
+import org.assertj.core.api.Assertions.assertThat
 import reactor.core.publisher.Flux
 import reactor.domain.User
 import reactor.kotlin.test.test
@@ -37,10 +38,10 @@ class Part03StepVerifier {
 
     fun expectSkylerJesseComplete(flux: Flux<User>) {
         flux.test()
-            .expectNext(
-                User("swhite", null, null),
-                User("jpinkman", null, null),
-            )
+            .expectNextMatches { it.username == "swhite" }
+//            .assertNext { assertThat(it.username).isEqualToIgnoringCase("swhite") }
+//            .expectNextMatches { it.username == "jpinkman" }
+            .assertNext { assertThat(it.username).isEqualToIgnoringCase("jpinkman") }
             .verifyComplete()
     }
 
