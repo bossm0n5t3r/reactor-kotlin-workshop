@@ -2,7 +2,9 @@ package reactor
 
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import reactor.domain.User
+import reactor.kotlin.core.publisher.toFlux
 import reactor.repository.BlockingRepository
 
 /**
@@ -23,21 +25,17 @@ class Part11BlockingToReactive {
 // ========================================================================================
 
     fun blockingRepositoryToFlux(repository: BlockingRepository<User>): Flux<User> {
-        TODO(
-            "Create a Flux " +
-                "for reading all users from the blocking repository " +
-                "deferred until the flux is subscribed, " +
-                "and run it with a bounded elastic scheduler",
-        )
+        return Flux
+            .defer { repository.findAll().toFlux() }
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
 // ========================================================================================
 
     fun fluxToBlockingRepository(flux: Flux<User>, repository: BlockingRepository<User>): Mono<Void> {
-        TODO(
-            "Insert users contained in the Flux parameter in the blocking repository " +
-                "using a bounded elastic scheduler " +
-                "and return a Mono<Void> that signal the end of the operation",
-        )
+        return flux
+            .publishOn(Schedulers.boundedElastic())
+            .doOnNext { repository.save(it) }
+            .then()
     }
 }
