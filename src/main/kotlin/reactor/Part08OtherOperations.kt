@@ -16,48 +16,44 @@ class Part08OtherOperations {
         firstnameFlux: Flux<String>,
         lastnameFlux: Flux<String>,
     ): Flux<User> {
-        TODO("Create a Flux of user from Flux of username, firstname and lastname.")
+        return Flux
+            .zip(usernameFlux, firstnameFlux, lastnameFlux)
+            .map { User(it.t1, it.t2, it.t3) }
     }
 
 // ========================================================================================
 
     fun useFastestMono(mono1: Mono<User>, mono2: Mono<User>): Mono<User> {
-        TODO("Return the mono which returns its value faster")
+        return Mono.firstWithValue(mono1, mono2)
     }
 
 // ========================================================================================
 
     fun useFastestFlux(flux1: Flux<User>, flux2: Flux<User>): Flux<User> {
-        TODO("Return the flux which returns the first value faster")
+        return Flux.firstWithValue(flux1, flux2)
     }
 
 // ========================================================================================
 
     fun fluxCompletion(flux: Flux<User>): Mono<Void> {
-        TODO("Convert the input Flux<User> to a Mono<Void> that represents the complete signal of the flux")
+        return flux.then()
     }
 
 // ========================================================================================
 
     fun nullAwareUserToMono(user: User?): Mono<User> {
-        TODO(
-            "Return a valid Mono of user for null input " +
-                "and non null input user (hint: Reactive Streams do not accept null values)",
-        )
+        return Mono.justOrEmpty(user)
     }
 
 // ========================================================================================
 
     fun emptyToSkyler(mono: Mono<User>): Mono<User> {
-        TODO(
-            "Return the same mono passed as input parameter, " +
-                "expect that it will emit User.SKYLER when empty",
-        )
+        return mono.defaultIfEmpty(User.SKYLER)
     }
 
 // ========================================================================================
 
     fun fluxCollection(flux: Flux<User>): Mono<List<User>> {
-        TODO("Convert the input Flux<User> to a Mono<List<User>> containing list of collected flux values")
+        return flux.collectList()
     }
 }
