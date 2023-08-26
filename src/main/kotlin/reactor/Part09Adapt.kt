@@ -1,11 +1,13 @@
 package reactor
 
+import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.domain.User
+import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -22,40 +24,40 @@ class Part09Adapt {
 // ========================================================================================
 
     fun fromFluxToFlowable(flux: Flux<User>): Flowable<User> {
-        TODO("Adapt Flux to RxJava Flowable")
+        return Flowable.fromPublisher(flux)
     }
 
     fun fromFlowableToFlux(flowable: Flowable<User>): Flux<User> {
-        TODO("Adapt RxJava Flowable to Flux")
+        return Flux.from(flowable)
     }
 
 // ========================================================================================
 
     fun fromFluxToObservable(flux: Flux<User>): Observable<User> {
-        TODO("Adapt Flux to RxJava Observable")
+        return Observable.fromPublisher(flux)
     }
 
     fun fromObservableToFlux(observable: Observable<User>): Flux<User> {
-        TODO("Adapt RxJava Observable to Flux")
+        return Flux.from(Flowable.fromObservable(observable, BackpressureStrategy.BUFFER))
     }
 
 // ========================================================================================
 
     fun fromMonoToSingle(mono: Mono<User>): Single<User> {
-        TODO("Adapt Mono to RxJava Single")
+        return Single.fromPublisher(mono)
     }
 
     fun fromSingleToMono(single: Single<User>): Mono<User> {
-        TODO("Adapt RxJava Single to Mono")
+        return Mono.from(Flowable.fromSingle(single))
     }
 
 // ========================================================================================
 
     fun fromMonoToCompletableFuture(mono: Mono<User>): CompletableFuture<User> {
-        TODO("Adapt Mono to Java 8+ CompletableFuture")
+        return mono.toFuture()
     }
 
     fun fromCompletableFutureToMono(future: CompletableFuture<User>): Mono<User> {
-        TODO("Adapt Java 8+ CompletableFuture to Mono")
+        return future.toMono()
     }
 }
