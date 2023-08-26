@@ -12,24 +12,24 @@ class Part02Mono {
 // ========================================================================================
 
     fun emptyMono(): Mono<String> {
-        TODO("Return an empty Mono")
+        return Mono.empty()
     }
 
 // ========================================================================================
 
     fun monoWithNoSignal(): Mono<String> {
-        TODO("Return a Mono that never emits any signal")
+        return Mono.never()
     }
 
 // ========================================================================================
 
     fun fooMono(): Mono<String> {
-        TODO("Return a Mono that contains a \" foo \" value")
+        return Mono.just("foo")
     }
 
 // ========================================================================================
 
     fun errorMono(): Mono<String> {
-        TODO("Create a Mono that emits an IllegalStateException")
+        return Mono.error(IllegalStateException("errorMono"))
     }
 }
