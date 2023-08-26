@@ -15,35 +15,36 @@ class Part06Request {
 // ========================================================================================
 
     fun requestAllExpectFour(flux: Flux<User>): StepVerifier {
-        TODO("Create a StepVerifier that initially requests all values and expect 4 values to be received")
+        return StepVerifier.create(flux)
+            .expectNextCount(4)
+            .expectComplete()
     }
 
 // ========================================================================================
 
     fun requestOneExpectSkylerThenRequestOneExpectJesse(flux: Flux<User>): StepVerifier {
-        TODO(
-            "Create a StepVerifier that " +
-                "initially requests 1 value and expects User.SKYLER " +
-                "then requests another value and expects User.JESSE " +
-                "then stops verifying by cancelling the source",
-        )
+        return StepVerifier.create(flux)
+            .thenRequest(1)
+            .expectNextMatches { it == User.SKYLER }
+            .thenRequest(1)
+            .expectNextMatches { it == User.JESSE }
+            .thenCancel()
     }
 
 // ========================================================================================
 
     fun fluxWithLog(): Flux<User> {
-        TODO(
-            "Return a Flux with all users stored in the repository that " +
-                "prints automatically logs for all Reactive Streams signals",
-        )
+        return repository.findAll()
+            .log()
     }
 
 // ========================================================================================
 
     fun fluxWithDoOnPrintln(): Flux<User> {
-        TODO(
-            "Return a Flux with all users stored in the repository that " +
-                "prints \"Starring:\" at first, \"firstname lastname\" for all values and \"The end!\" on complete",
-        )
+        return repository.findAll()
+            .doFirst { println("Starring:") }
+//            .doOnSubscribe { println("Starring:") }
+            .doOnNext { user -> println("${user.firstname} ${user.lastname}") }
+            .doOnComplete { print("The end!") }
     }
 }
