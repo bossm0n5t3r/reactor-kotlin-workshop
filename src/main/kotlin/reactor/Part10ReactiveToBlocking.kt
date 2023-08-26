@@ -12,12 +12,12 @@ class Part10ReactiveToBlocking {
 // ========================================================================================
 
     fun monoToValue(mono: Mono<User>): User? {
-        TODO("Return the user contained in that Mono")
+        return mono.block()
     }
 
 // ========================================================================================
 
     fun fluxToValues(flux: Flux<User>): Iterable<User> {
-        TODO("Return the users contained in that Flux")
+        return flux.toIterable()
     }
 }
