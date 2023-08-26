@@ -1,6 +1,5 @@
 package reactor
 
-import io.reactivex.rxjava3.annotations.Nullable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -17,16 +16,12 @@ class Part06RequestTest {
 
     private val originalConsole = System.out
 
-    @Nullable // null when not useful
-    private var logConsole: ByteArrayOutputStream? = null
+    private val logConsole: ByteArrayOutputStream = ByteArrayOutputStream()
 
     @AfterEach
     fun afterEach() {
-        if (logConsole != null) {
-            originalConsole.println(logConsole.toString())
-            System.setOut(originalConsole)
-            logConsole = null
-        }
+        originalConsole.println(logConsole.toString())
+        System.setOut(originalConsole)
     }
 
 // ========================================================================================
@@ -51,8 +46,7 @@ class Part06RequestTest {
 
     @Test
     fun experimentWithLog() {
-        logConsole = ByteArrayOutputStream()
-        System.setOut(logConsole?.let { PrintStream(it) })
+        System.setOut(PrintStream(logConsole))
 
         val flux: Flux<User> = sut.fluxWithLog()
 
@@ -66,20 +60,25 @@ class Part06RequestTest {
             .expectNextMatches { _ -> true }
             .verifyComplete()
 
-        val log: List<String> = logConsole.toString().split(System.lineSeparator())
-            .filter { it.contains("] INFO") }
-            .map { it.replace(".*] INFO .* - ", "") }
+        val log: List<String> = logConsole.toString()
+            .split(System.lineSeparator())
+            .filter { it.contains("INFO") }
+            .map {
+                it
+                    .replace("[ INFO] (", "")
+                    .substringAfter(") ")
+            }
 
         assertThat(log)
             .containsExactly(
                 "onSubscribe(FluxZip.ZipCoordinator)",
                 "request(1)",
-                "onNext(Person{username='swhite', firstname='Skyler', lastname='White'})",
+                "onNext(User(username=swhite, firstname=Skyler, lastname=White))",
                 "request(1)",
-                "onNext(Person{username='jpinkman', firstname='Jesse', lastname='Pinkman'})",
+                "onNext(User(username=jpinkman, firstname=Jesse, lastname=Pinkman))",
                 "request(2)",
-                "onNext(Person{username='wwhite', firstname='Walter', lastname='White'})",
-                "onNext(Person{username='sgoodman', firstname='Saul', lastname='Goodman'})",
+                "onNext(User(username=wwhite, firstname=Walter, lastname=White))",
+                "onNext(User(username=sgoodman, firstname=Saul, lastname=Goodman))",
                 "onComplete()",
             )
     }
@@ -91,8 +90,7 @@ class Part06RequestTest {
         val flux: Flux<User> = sut.fluxWithDoOnPrintln()
 
         // setting up the logConsole here should ensure we only capture console logs from the Flux
-        logConsole = ByteArrayOutputStream()
-        System.setOut(logConsole?.let { PrintStream(it) })
+        System.setOut(PrintStream(logConsole))
 
         StepVerifier.create(flux)
             .expectNextCount(4)
