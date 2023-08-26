@@ -23,12 +23,21 @@ class Part11BlockingToReactive {
 // ========================================================================================
 
     fun blockingRepositoryToFlux(repository: BlockingRepository<User>): Flux<User> {
-        TODO("Create a Flux for reading all users from the blocking repository deferred until the flux is subscribed, and run it with a bounded elastic scheduler")
+        TODO(
+            "Create a Flux " +
+                "for reading all users from the blocking repository " +
+                "deferred until the flux is subscribed, " +
+                "and run it with a bounded elastic scheduler",
+        )
     }
 
 // ========================================================================================
 
     fun fluxToBlockingRepository(flux: Flux<User>, repository: BlockingRepository<User>): Mono<Void> {
-        TODO("Insert users contained in the Flux parameter in the blocking repository using a bounded elastic scheduler and return a Mono<Void> that signal the end of the operation")
+        TODO(
+            "Insert users contained in the Flux parameter in the blocking repository " +
+                "using a bounded elastic scheduler " +
+                "and return a Mono<Void> that signal the end of the operation",
+        )
     }
 }
