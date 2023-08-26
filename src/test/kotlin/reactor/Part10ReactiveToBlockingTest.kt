@@ -17,7 +17,7 @@ class Part10ReactiveToBlockingTest {
     @Test
     fun mono() {
         val mono: Mono<User> = repository.findFirst()
-        val user: User = sut.monoToValue(mono)
+        val user: User? = sut.monoToValue(mono)
         assertThat(user).isEqualTo(User.SKYLER)
     }
 
