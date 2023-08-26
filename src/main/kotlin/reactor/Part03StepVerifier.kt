@@ -2,6 +2,10 @@ package reactor
 
 import reactor.core.publisher.Flux
 import reactor.domain.User
+import reactor.kotlin.test.test
+import reactor.kotlin.test.verifyError
+import reactor.test.StepVerifier
+import java.time.Duration
 import java.util.function.Supplier
 
 /**
@@ -16,44 +20,44 @@ class Part03StepVerifier {
 // ========================================================================================
 
     fun expectFooBarComplete(flux: Flux<String>) {
-        TODO(
-            "Use StepVerifier to check that " +
-                "the flux parameter emits \"foo\" and \"bar\" elements then completes successfully.",
-        )
+        flux.test()
+            .expectNext("foo", "bar")
+            .verifyComplete()
     }
 
 // ========================================================================================
 
     fun expectFooBarError(flux: Flux<String>) {
-        TODO(
-            "Use StepVerifier to check that " +
-                "the flux parameter emits \"foo\" and \"bar\" elements then a RuntimeException error.",
-        )
+        flux.test()
+            .expectNext("foo", "bar")
+            .verifyError(RuntimeException::class)
     }
 
 // ========================================================================================
 
     fun expectSkylerJesseComplete(flux: Flux<User>) {
-        TODO(
-            "Use StepVerifier to check that " +
-                "the flux parameter emits a User with \"swhite\" username and another one with \"jpinkman\" " +
-                "then completes successfully.",
-        )
+        flux.test()
+            .expectNext(
+                User("swhite", null, null),
+                User("jpinkman", null, null),
+            )
+            .verifyComplete()
     }
 
 // ========================================================================================
 
     fun expect10Elements(flux: Flux<Long>) {
-        TODO("Expect 10 elements then complete and notice how long the test takes.")
+        flux.test()
+            .expectNextCount(10)
+            .verifyComplete()
     }
 
 // ========================================================================================
 
     fun expect3600Elements(supplier: Supplier<Flux<Long>>) {
-        TODO(
-            "Expect 3600 elements at intervals of 1 second, and verify quicker than " +
-                "3600s by manipulating virtual time thanks to StepVerifier#withVirtualTime, " +
-                "notice how long the test takes",
-        )
+        StepVerifier.withVirtualTime(supplier)
+            .thenAwait(Duration.ofHours(1))
+            .expectNextCount(3600)
+            .verifyComplete()
     }
 }
