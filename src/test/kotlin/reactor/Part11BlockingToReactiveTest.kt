@@ -9,6 +9,8 @@ import reactor.repository.BlockingUserRepository
 import reactor.repository.ReactiveRepository
 import reactor.repository.ReactiveUserRepository
 import reactor.test.StepVerifier
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class Part11BlockingToReactiveTest {
     private val sut = Part11BlockingToReactive()
@@ -32,16 +34,19 @@ class Part11BlockingToReactiveTest {
     @Test
     fun fastPublisherSlowSubscriber() {
         val reactiveRepository: ReactiveRepository<User> = ReactiveUserRepository()
-        val blockingRepository = BlockingUserRepository()
+        val blockingRepository = BlockingUserRepository(*arrayOf())
         val complete: Mono<Void> = sut.fluxToBlockingRepository(reactiveRepository.findAll(), blockingRepository)
-        assertThat(blockingRepository.callCount).isEqualTo(0)
+
+        assertEquals(0, blockingRepository.callCount)
+
         StepVerifier.create(complete)
             .verifyComplete()
+
         val it: Iterator<User> = blockingRepository.findAll().iterator()
-        assertThat(it.next()).isEqualTo(User.SKYLER)
-        assertThat(it.next()).isEqualTo(User.JESSE)
-        assertThat(it.next()).isEqualTo(User.WALTER)
-        assertThat(it.next()).isEqualTo(User.SAUL)
-        assertThat(it.hasNext()).isFalse()
+        assertEquals(it.next(), User.SKYLER)
+        assertEquals(it.next(), User.JESSE)
+        assertEquals(it.next(), User.WALTER)
+        assertEquals(it.next(), User.SAUL)
+        assertFalse(it.hasNext())
     }
 }
