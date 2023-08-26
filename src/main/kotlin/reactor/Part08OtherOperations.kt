@@ -11,7 +11,11 @@ class Part08OtherOperations {
 
 // ========================================================================================
 
-    fun userFluxFromStringFlux(usernameFlux: Flux<String>, firstnameFlux: Flux<String>, lastnameFlux: Flux<String>): Flux<User> {
+    fun userFluxFromStringFlux(
+        usernameFlux: Flux<String>,
+        firstnameFlux: Flux<String>,
+        lastnameFlux: Flux<String>,
+    ): Flux<User> {
         TODO("Create a Flux of user from Flux of username, firstname and lastname.")
     }
 
@@ -36,13 +40,19 @@ class Part08OtherOperations {
 // ========================================================================================
 
     fun nullAwareUserToMono(user: User?): Mono<User> {
-        TODO("Return a valid Mono of user for null input and non null input user (hint: Reactive Streams do not accept null values)")
+        TODO(
+            "Return a valid Mono of user for null input " +
+                "and non null input user (hint: Reactive Streams do not accept null values)",
+        )
     }
 
 // ========================================================================================
 
     fun emptyToSkyler(mono: Mono<User>): Mono<User> {
-        TODO("Return the same mono passed as input parameter, expect that it will emit User.SKYLER when empty")
+        TODO(
+            "Return the same mono passed as input parameter, " +
+                "expect that it will emit User.SKYLER when empty",
+        )
     }
 
 // ========================================================================================
