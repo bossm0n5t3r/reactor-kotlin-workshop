@@ -21,9 +21,24 @@ class Part08OtherOperationsTest {
 
     @Test
     fun zipFirstNameAndLastName() {
-        val usernameFlux: Flux<String> = Flux.just(User.SKYLER.username, User.JESSE.username, User.WALTER.username, User.SAUL.username)
-        val firstnameFlux: Flux<String> = Flux.just(User.SKYLER.firstname, User.JESSE.firstname, User.WALTER.firstname, User.SAUL.firstname)
-        val lastnameFlux: Flux<String> = Flux.just(User.SKYLER.lastname, User.JESSE.lastname, User.WALTER.lastname, User.SAUL.lastname)
+        val usernameFlux: Flux<String> = Flux.just(
+            User.SKYLER.username,
+            User.JESSE.username,
+            User.WALTER.username,
+            User.SAUL.username,
+        )
+        val firstnameFlux: Flux<String> = Flux.just(
+            User.SKYLER.firstname,
+            User.JESSE.firstname,
+            User.WALTER.firstname,
+            User.SAUL.firstname,
+        )
+        val lastnameFlux: Flux<String> = Flux.just(
+            User.SKYLER.lastname,
+            User.JESSE.lastname,
+            User.WALTER.lastname,
+            User.SAUL.lastname,
+        )
         val userFlux: Flux<User> = sut.userFluxFromStringFlux(usernameFlux, firstnameFlux, lastnameFlux)
         StepVerifier.create(userFlux)
             .expectNext(User.SKYLER, User.JESSE, User.WALTER, User.SAUL)
